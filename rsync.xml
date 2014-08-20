@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="RSync on save" basedir="." default="rsync">
+    <description>ANT Builder that rsyncs on every save</description>
+    
+    <!-- rsync settings -->
+    <property name="rsync.source.dir" value="${basedir}/" />
+    <property name="rsync.destination.host" value="alchaedem.renet" />
+    <property name="rsync.destination.dir" value="/var/www/oetfdev/" />
+    <property name="rsync.ssh.key" value="/home/keith/.ssh/id_rsa" />
+    <property name="rsync.ssh.user" value="keith"/>
+    
+    <target name="rsync">
+        <echo message="RSync source:" />
+        <echo message="${rsync.source.dir}" />
+        <echo message="RSync destination:" />
+        <echo message="${rsync.ssh.user}@${rsync.destination.host}:${rsync.destination.dir}" />
+        <exec dir="." executable="rsync" >
+            <arg value="-arv" />
+            
+            <!-- exclude hidden -->
+            <arg line="--exclude='.*'" />
+            <arg line="--exclude='*.conf'" />
+            
+            <!-- exclude this very file -->
+            <arg line="--exclude='rsync.xml'" />
+            <arg line="--exclude='rsync_p.xml'" />
+            
+            <arg line="-e &quot;ssh -i ${rsync.ssh.key}&quot;"/>
+            
+            <arg value="${rsync.source.dir}"/>
+            
+            <arg value="${rsync.ssh.user}@${rsync.destination.host}:${rsync.destination.dir}"/>
+        </exec>
+    </target>
+</project>

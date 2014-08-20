@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block title %} OETF {% endblock %}</title>
+        
+        <link href="/templates/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/templates/css/site.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="offcanvas">
+                    <span class="sr-only">Toggle NavBar</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">OETF</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-xs-12 col-sm-9">
+                {% block content %}    
+                <div class="jumbotron">
+                    {% block header %}
+                    <h1>Uhm, hey ... I guess</h1>
+                    <p>I don't quite know how you ended up here, but you shouldn't have... 0.0</p>
+                    {% endblock %}
+                </div>
+                {% block main_content %}
+                {% endblock %}
+                {% endblock %}
+            </div>
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div></li>
+                    <li {% if default %}class="active"{% endif %}><a href="/">Main Page</a></li>
+                    <li {% if about %}class="active"{% endif %}><a href="?r=default/about">About</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        List Submits <span class="caret"></span>
+                    </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li {% if list_alph %}class="active"{% endif %} role="navigation"><a role="menuitem" tabindex="-1" href="?r=submits/list_alphabetic">Ordered by Alphabet</a></li>
+                            <li {% if list_tags %}class="active"{% endif %} role="navigation"><a role="menuitem" tabindex="-1" href="?r=submits/list_tag">Ordered by Tag</a></li>
+                            <li {% if list_date %}class="active"{% endif %} role="navigation"><a role="menuitem" tabindex="-1" href="?r=submits/list_date">Ordered by Date</a></li>
+                        </ul>
+                    </li>
+                    <li {% if submit %}class="active"{% endif %}><a href="?r=submit/submit_new">Submit New</a></li>
+                    {% if user_is_logged_in %}
+                        <li {% if profile %}class="active"{% endif %}><a href="?r=user/profile">{{ username }}</a></li>
+                    {% else %}
+                        <li {% if login %}class="active"{% endif %}><a href="?r=user/login">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        
+        
+        </div>
+
+        <hr>
+
+        <footer>
+            <p>&copy; Paranoidlabs 2014</p>
+        </footer>
+
+    </div>
+
+    <script src="/templates/js/jquery-2.1.1.min.js"></script>
+    <script src="/templates/js/bootstrap.min.js"></script>
+    <script src="/templates/js/offcanvas.js"></script>
+  </body>
+</html>

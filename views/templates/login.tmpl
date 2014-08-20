@@ -1,0 +1,30 @@
+{% extends "base.tmpl" %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <div class="row">
+        {% if failed %}
+        <div class="alert alert-danger">
+            {{ f_reason }}
+        </div>
+        {% endif %}
+        <form role="login" method="POST">
+            <div class="form-group">
+                <label for="UsernameInput">Username:</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-user"></span>
+                    <input type="text" class="form-control" id="UsernameInput" placeholder="Enter Username" name="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="PasswordInput">Password:</label>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                    <input type="password" class="form-control" id="PasswordInput" placeholder="Password" name="password">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

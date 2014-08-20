@@ -1,0 +1,8 @@
+{% extends "base.tmpl" %}
+{% block title %} {{ error_num }} {% endblock %}
+{% block content %}
+<h1>I BLAME SANGAR!!!</h1>
+<div class="alert alert-danger">
+    {{ error_message }}
+</div>
+{% endblock %}

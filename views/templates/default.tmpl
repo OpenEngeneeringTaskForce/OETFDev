@@ -1,0 +1,27 @@
+{% extends "base.tmpl" %}
+{% block title %} OpenEngineersTaskForce {% endblock %}
+{% block content %}
+    {% if user_is_logged_in %}
+    <div class="jumbotron">
+        <h1>Welcome back {{ username }}!</h1>
+        <p>This is the page of the OETF - the Open Engineers Task Force!</p>
+    </div>
+    {% else %}
+    <div class="jumbotron">
+        <h1>Say Hello to OETF!</h1>
+        <p>This is the page of the OETF - the Open Engineers Task Force!</p>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-6 col-sm-6 col-lg-4">
+            <h2>About OETF</h2>
+            <p>OETF is just like IETF, but for OpenComputers.</p>
+            <p><a class="btn btn-default" href="?r=default/about" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-6 col-sm-6 col-lg-4">
+            <h2>Submit</h2>
+            <p>This is where I would put the last submits, IF I HAD ANY!!!</p>
+            <p><a class="btn btn-default" href="?r=" role="button">View details &raquo;</a></p>
+        </div>
+    </div>
+{% endblock %}

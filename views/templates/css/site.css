@@ -1,0 +1,46 @@
+@font-face { font-family: Quicksand; src: url(/templates/fonts/Quicksand-Regular.otf)}
+@font-face { font-family: Quicksand-Bold; src: url(/templates/fonts/Quicksand-Bold.otf)}
+
+html,
+body {
+  overflow-x: hidden;
+  font-family: Quicksand;
+}
+body {
+  padding-top: 70px;
+}
+footer {
+  padding: 20px 0;
+}
+
+.jumbotron {
+    font-family: Quicksand-Bold;
+}
+
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%;
+  }
+
+  .row-offcanvas-right.active {
+    right: 60%;
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%;
+  }
+}
