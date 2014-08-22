@@ -1,0 +1,16 @@
+{% extends "base.tmpl" %}
+{% block title %}Submits{% endblock %}
+{% block header %}
+<ol class="breadcrumb">
+    <li><a href="/">Main</a></li>
+    <li class="active">List by {{ order }}</li>
+</ol>
+<div class="list-group">
+{% for submit in submits %}
+  <a href="#" class="list-group-item">
+    <h4 class="list-group-item-heading">{{ submit.title }}</h4>
+    <p class="list-group-item-text">Published on {{ submit.date }} by {{ submit.publisher }}</p>
+  </a>
+{% endfor %}
+</div>
+{% endblock %}

@@ -23,13 +23,15 @@ class Request(dict):
         self.environ = environ
         self.method = environ['REQUEST_METHOD']
         self.get_dict = strip_request_uri(environ['REQUEST_URI'])
+        self.post_vars = None
         self.request_list = self.get_dict.get("r", ["default/default"])[0].split("/")
         if len(self.request_list) == 1:
             self.request_list.append("default")
     
     def parse_vars(self):
         'Parse POST vars into dictionary'
-        self.post_vars = urllib.parse.parse_qs(self.environ['wsgi.input'].readline().decode('UTF-8'), True)
+        if self.post_vars == None:
+            self.post_vars = urllib.parse.parse_qs(self.environ['wsgi.input'].readline().decode('UTF-8'), True)
 
 
 class Session(dict):
@@ -48,9 +50,9 @@ class Session(dict):
                 if cookie['oetf'].value != "":  # User could be logged in
                     user_auth_hash = cookie['oetf'].value
                     sql_helper = MySQLHelper()
-                    result = sql_helper.query_one("session", "user_id", "user_auth_hash = '" + user_auth_hash + "'")
-                    if result != "":
-                        self.user.login(int(result))
+                    result = sql_helper.query_one("session", ["user_id"], "user_auth_hash = '" + user_auth_hash + "'")
+                    if result != []:
+                        self.user.login(result['user_id'])
                     else:
                         cookie['oetf'] = ""
                     return cookie
@@ -58,6 +60,7 @@ class Session(dict):
         cookie = SimpleCookie()
         cookie['oetf'] = ""
         cookie['oetf']['expires'] = time.strftime("%a, %d %b %Y %H %M %S GMT", time.localtime(math.floor(time.time()) + 63072000 ))
+        cookie['oetf']['path'] = "/"
         return cookie
     
     def finalize_view(self):
@@ -143,6 +146,11 @@ class Response(dict):
         response_function(self.status, headers)
         
         return [ str(self.body).encode('utf_8') ]
+    
+    def set_custom_header(self, headers):
+        'Adds custom headers to the response. headers should be a list of tuples with (name, val)'
+        for head in headers:
+            self.headers.append(head)
 
 
 class HTTPError(Exception):
@@ -165,4 +173,6 @@ def return_redirect_response(url, session, absolute=False):
     'Redirects to the given url.'
     if absolute == False:
         url = "http://oetfdev.renet/" + url
-    return Response(303, 'You are being redirected <a href="%s">here</a>' % url, session)
+    response = Response(303, '', session)
+    response.set_custom_header([("Location", url)])
+    return response

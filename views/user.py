@@ -19,7 +19,11 @@ class Login(ViewBase):
                    "Thats not your password! Is that even your account??",
                    "Oh no, not YOU again....",
                    "Stahp! You are hurting meeeee! :<",
-                   "You're gonna be my new meat bicycle!!"]
+                   "You're gonna be my new meat bicycle!!",
+                   "Short update: LOGIN FAILED!",
+                   "THIS IS UNACCEPTABLE!!!",
+                   "Looks like a tyop.",
+                   "42 is not the answer here, nor is it the password, or even username, if it is... <a href='https://xkcd.com/936/'>https://xkcd.com/936/</a>"]
 
 
     def __init__(self, session):

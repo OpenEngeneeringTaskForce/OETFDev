@@ -1,4 +1,4 @@
-#/bin/python3
+#/bin/python3github.com/FSX/misaka
 # -*- coding: utf-8
 '''
 Created on Aug 18, 2014
@@ -42,6 +42,11 @@ def dynamify(request, session):
                 return controller.get(request.request_list[1])
             if req_method == "POST":
                 return controller.post(request.request_list[1])
+        if request.request_list[0] == "submits":
+            from controllers.submits import SubmitController
+            controller = SubmitController(request, session)
+            if req_method == "GET":
+                return controller.get(request.request_list[1]) 
         
         # Nothing was returned. Make it a 404' for good measure
         error_view = Error_404(session)

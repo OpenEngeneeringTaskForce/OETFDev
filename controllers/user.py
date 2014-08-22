@@ -9,12 +9,10 @@ User controller file (Login, profile and such)
 from pycore.Base import ControllerBase
 from pycore.http_util import HTTPError, Response, return_redirect_response
 from pycore.sql_util import MySQLHelper
+from http.client import HTTPException
 
 class UserController(ControllerBase):
     'User controller providing stuff like login and profile view'
-    
-    def __init__(self, request, session):
-        super().__init__(request, session)
     
     def get(self, model):
         'GET'
@@ -28,6 +26,28 @@ class UserController(ControllerBase):
                 view_vars = model.get()
                 body = view.render(view_vars)
                 return Response(200, body, self.session)
+            except HTTPError:
+                raise
+            except Exception as e:
+                raise HTTPError(500, "Controller raised: " + str(e), self.session)
+        if model == "logout":
+            try:
+                self.session.user.logout()
+                return return_redirect_response("", self.session)
+            except Exception as e:
+                raise HTTPError(500, "Controller raised: " + str(e), self.session)
+        if model == "profile":
+            # GET on profile. ATM still a static page, so...
+            try:
+                from models.user import Profile as Model
+                from views.user import Profile as View
+                model = Model(self.request, self.session)
+                view = View(self.session)
+                view_vars = model.get()
+                body = view.render(view_vars)
+                return Response(200, body, self.session)
+            except HTTPError:
+                raise
             except Exception as e:
                 raise HTTPError(500, "Controller raised: " + str(e), self.session)
     
@@ -46,5 +66,7 @@ class UserController(ControllerBase):
                     return Response(200, body, self.session)
                 else:
                     return return_redirect_response("", self.session)
+            except HTTPError:
+                raise
             except Exception as e:
                 raise HTTPError(500, "Controller raised: " + str(e), self.session)

@@ -1,0 +1,13 @@
+{% extends "base.tmpl" %}
+{% block title %} {{ username }}'s Profile {% endblock %}
+{% block content %}
+<ol class="breadcrumb">
+    <li><a href="/">Main</a></li>
+    <li class="active">Profile of {{ username }}</li>
+</ol>
+<h1>That's your profile, {{ username }}</h1>
+<p>Not very exciting, is it?</p>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4"><a href="?r=user/logout"><button type="button" class="btn btn-primary btn-lg btn-block">Log out</button></a></div>
+</div>
+{% endblock %}
