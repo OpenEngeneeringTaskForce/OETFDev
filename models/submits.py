@@ -37,6 +37,10 @@ class DetailSubmit(ModelBase):
 class NewSubmit(ModelBase):
     'Create a new submit'
     
+    def __init__(self, request, session):
+        from pycore.submit_util import SubmitHelper
+        super().__init__(request, session)
+    
     def get(self):
         return {}
     
