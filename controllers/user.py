@@ -50,6 +50,19 @@ class UserController(ControllerBase):
                 raise
             except Exception as e:
                 raise HTTPError(500, "Controller raised: " + str(e), self.session)
+        if model == "register":
+            try:
+                from models.user import Register as Model
+                from views.user import Register as View
+                model = Model(self.request, self.session)
+                view = View(self.session)
+                view_vars = model.get()
+                body = view.render(view_vars)
+                return Response(200, body, self.session)
+            except HTTPError:
+                raise
+            except Exception as e:
+                raise HTTPError(500, "Controller raised: " + str(e), self.session)
     
     def post(self, model):
         'POST'
@@ -57,6 +70,22 @@ class UserController(ControllerBase):
             try:
                 #POST'ed Login -> check if cred's are valid.
                 from models.user import Login as Model
+                model = Model(self.request, self.session)
+                view_vars = model.post()
+                if view_vars['failed']:
+                    from views.user import Login as View
+                    view = View(self.session)
+                    body = view.render(view_vars)
+                    return Response(200, body, self.session)
+                else:
+                    return return_redirect_response("", self.session)
+            except HTTPError:
+                raise
+            except Exception as e:
+                raise HTTPError(500, "Controller raised: " + str(e), self.session)
+        if model == "register":
+            try:
+                from models.user import Register as Model
                 model = Model(self.request, self.session)
                 view_vars = model.post()
                 if view_vars['failed']:

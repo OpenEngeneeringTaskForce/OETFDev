@@ -24,7 +24,13 @@ def application(environ, responder):
     # Same for a session
     session = Session(request)
     
-    return dynamify(request, session).send(responder) # Takes the Response object returned by dynamify and returnes the body (headers is handled by function internally)
+    try:
+        return dynamify(request, session).send(responder) # Takes the Response object returned by dynamify and returnes the body (headers is handled by function internally)
+    except AttributeError:
+        error_view = Error_404(session)
+        return HTTPError(404, error_view.render(), session, direct=True).responde().send()
+    except Exception as e:
+        return HTTPError(500, str(e), session).responde().send()
 
 def dynamify(request, session):
     'Tried to dynamify the Webpage and returns it. If fail, fail'

@@ -43,3 +43,9 @@ class Profile(ViewBase):
         self.template_name = "profile.tmpl"
         self.active = "profile"
         super().__init__(session)
+
+class Register(ViewBase):
+    'Register View'
+    def __init__(self, session):
+        self.template_name = "register.tmpl"
+        super().__init__(session)
