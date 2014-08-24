@@ -10,12 +10,13 @@ import configparser
 from contextlib import closing
 from builtins import int
 
-configp = configparser.ConfigParser()
-configp.read('config/mysql.conf')
-config = dict(configp['MySQL'])
-
 class MySQLHelper():
     'SQL Bindings'
+    
+    def __init__(self, config="oetf"):
+        configp = configparser.ConfigParser()
+        configp.read('config/mysql.conf')
+        self.config = dict(configp[config])
     
     def query_data(self, table, selection, delimiter="", order="", row_num=0):
         '''
@@ -32,7 +33,8 @@ class MySQLHelper():
             delimiter = " WHERE " + delimiter
         if order != "":
             order = " ORDER BY " + order
-        with closing(mysql.connector.connect(**config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
+        table = "`" + table + "`"
+        with closing(mysql.connector.connect(**self.config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
             result = []
             cur = con.cursor(dictionary=True) # Create a new dictionaried cursor. This will return rows formated as dicts (key=rowname, value=rowcontent)
             if row_num == 0: # Get all rows
@@ -56,7 +58,7 @@ class MySQLHelper():
         return result[0]
     
     def delete_data(self, table, delimiter):
-        with closing(mysql.connector.connect(**config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
+        with closing(mysql.connector.connect(**self.config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
             cur = con.cursor()
             cur.execute("DELETE FROM " + table + " WHERE " + delimiter)
             cur.close()
@@ -68,7 +70,7 @@ class MySQLHelper():
         insert_data should be a list of dictionaries of the format: [{column_name: to_be_inserted}]
         '''
         # insert_data = [{a:b, c:d}]
-        with closing(mysql.connector.connect(**config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
+        with closing(mysql.connector.connect(**self.config)) as con: # MySQL Connection gets automatically closed as soon as its no longer needed.
             cur = con.cursor()
             for column_dict in insert_data:
                 key_list = []
@@ -81,7 +83,18 @@ class MySQLHelper():
                 cur.execute("INSERT INTO " + table + " ( " + ", ".join(key_list) + " ) VALUES ( " + ", ".join(val_plhd) + " )", val_list)
             con.commit()    # Execute all the statements
             cur.close()     # We're done here
+    
+    def check_exists(self, table_name):
+        with closing(mysql.connector.connect(**self.config)) as con:
+            cur = con.cursor()
+            cur.execute("SHOW TABLES LIKE '" + table_name + "'")
+            row = cur.fetchone()
+            if row == None:
+                return False
+            return True
 
+    def return_con(self):
+        return mysql.connector.connect(**self.config)
 
 class OutOfBoundsException(ValueError):
     'Raised if numeral values are out of the possible bounds'

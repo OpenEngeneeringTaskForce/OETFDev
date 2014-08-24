@@ -39,6 +39,7 @@ class Session(dict):
     
     def __init__(self, request):
         'Constructs a Session.'
+        self.user_agent = request.environ.get('HTTP_USER_AGENT', '')
         self.user = User(self)
         self.cookie = self.get_cookie(request.environ)
     
@@ -65,8 +66,9 @@ class Session(dict):
     
     def finalize_view(self):
         'Returns a dictionary containing some more values for the templates'
-        return {"username": self.user.get_username(),
-                "is_logged_in": True if self.user.user_id != 0 else False }
+        if "MSIE" in self.user_agent and "MSIE 10" not in self.user_agent:
+            return {"username": self.user.get_username(), "is_logged_in": True if self.user.user_id != 0 else False, "old_IE": True}
+        return {"username": self.user.get_username(), "is_logged_in": True if self.user.user_id != 0 else False, "old_IE": False}
 
 
 class Response(dict):
@@ -172,7 +174,7 @@ class HTTPError(Exception):
 def return_redirect_response(url, session, absolute=False):
     'Redirects to the given url.'
     if absolute == False:
-        url = "http://oetfdev.renet/" + url
+        url = "https://oetfdev.renet/" + url
     response = Response(303, '', session)
     response.set_custom_header([("Location", url)])
     return response

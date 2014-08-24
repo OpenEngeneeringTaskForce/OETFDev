@@ -1,3 +1,7 @@
 # Config Files are private :< #
 ###############################
 *.conf
+
+*.komodoproject
+
+.*

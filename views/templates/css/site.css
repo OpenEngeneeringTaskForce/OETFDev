@@ -14,7 +14,11 @@ footer {
 }
 
 .jumbotron {
-    font-family: Quicksand-Bold;
+  font-family: Quicksand-Bold;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Quicksand;
 }
 
 @media screen and (max-width: 767px) {

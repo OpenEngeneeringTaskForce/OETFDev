@@ -46,7 +46,9 @@ def dynamify(request, session):
             from controllers.submits import SubmitController
             controller = SubmitController(request, session)
             if req_method == "GET":
-                return controller.get(request.request_list[1]) 
+                return controller.get(request.request_list[1])
+            if req_method == "POST":
+                return controller.post(request.request_list[1])
         
         # Nothing was returned. Make it a 404' for good measure
         error_view = Error_404(session)

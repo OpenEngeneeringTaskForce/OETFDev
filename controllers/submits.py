@@ -5,7 +5,7 @@ Created on Aug 20, 2014
 '''
 
 from pycore.Base import ControllerBase
-from pycore.http_util import Response, HTTPError
+from pycore.http_util import Response, HTTPError, return_redirect_response
 
 class SubmitController(ControllerBase):
     'Controller for posting and listing all avail. submits'
@@ -37,7 +37,14 @@ class SubmitController(ControllerBase):
                 view_args = model.get()
                 body = view.render(view_args)
                 return Response(200, body, self.session)
-                
+            if model == "detail":
+                from models.submits import DetailSubmit as Model
+                from views.submits import SubmitView as View
+                model = Model(self.request, self.session)
+                view = View(self.session)
+                view_args = model.get()
+                body = view.render(view_args)
+                return Response(200, body, self.session)
         except HTTPError:
             raise
         except Exception as e:
@@ -47,6 +54,11 @@ class SubmitController(ControllerBase):
         'Posts a new submit'
         try:
             if model == "submit_new":
+                from models.submits import NewSubmit as Model
+                model = Model(self.request, self.session)
+                model.post()
+                return return_redirect_response("?r=submits/list;sort=alphabet", self.session)
+            if model == "does_exist": # AJAX request if title is already existing
                 pass
         except HTTPError:
             raise

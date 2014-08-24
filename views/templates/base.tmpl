@@ -5,9 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{% block title %} OETF {% endblock %}</title>
-        
-        <link href="/templates/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/templates/css/site.css" rel="stylesheet">
+	
+        <link href="/templates/css/bootstrap.slate.min.css" rel="stylesheet">
+	<link href="/templates/css/site.css" rel="stylesheet">
+	
+	{% if old_IE %}
+	<script>
+	    alert("The 90's called. They want their browser back.\n No, seriously, your browser is waaaay to shitty for this page.\n Get something real!")
+	</script>
+	{% endif %}
   </head>
 
   <body>
@@ -82,5 +88,7 @@
     <script src="/templates/js/jquery-2.1.1.min.js"></script>
     <script src="/templates/js/bootstrap.min.js"></script>
     <script src="/templates/js/offcanvas.js"></script>
+    {% block scripts %}
+    {% endblock %}
   </body>
 </html>
